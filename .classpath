@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="libs/Spark/jetty-webapp-7.3.0.v20110203.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/servlet-api-3.0.pre4.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT-javadoc.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/Jackson/jackson-annotations-2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/Jackson/jackson-core-2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/Jackson/jackson-databind-2.1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/eSellDBServer"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
