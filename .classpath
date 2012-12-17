@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="libs/Spark/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT-javadoc.jar"/>
 	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/Spark/spark-0.9.9.3-SNAPSHOT.jar" sourcepath="libs/Spark/spark-0.9.9.3-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="libs/Jackson/jackson-annotations-2.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/Jackson/jackson-core-2.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/Jackson/jackson-databind-2.1.1.jar"/>

@@ -42,7 +42,7 @@ public class PetitionRoutes {
 		});
 		
 		// Speichert eine neues Kaufgesuch
-		post(new Route("/petition/") {
+		post(new Route("/petition") {
 			@Override
 			public Object handle(Request req, Response res) {
 				try {
@@ -89,32 +89,26 @@ public class PetitionRoutes {
 					methodName = "set" + param.substring(0, 1).toUpperCase() + param.substring(1);
 					
 					try {
-						switch (param) {
-							case "userid":
-							case "title":
-							case "description":
-							case "categoryid":
-							case "state":
+						if(param == "userID" ||
+							param == "title" ||
+							param == "description" ||
+							param == "categoryID" ||
+							param == "state") {
 								String newValue = req.queryParams(param);
 								method = petition.getClass().getMethod(methodName, String.class);
 								method.invoke(petition, newValue);
-								break;
-								
-							case "price":
-							case "amount":
+						}
+						if(param == "price" ||
+							param == "amount") {
 								int newInt = Integer.parseInt(req.queryParams(param));
 								method = petition.getClass().getMethod(methodName, int.class);
 								method.invoke(petition, newInt);
-								break;
+						}
 								
-							case "creation":
-								Date newDate = (Date) formatter.parse(req.queryParams(param));
-								method = petition.getClass().getMethod(methodName, Date.class);
-								method.invoke(petition, newDate);
-								break;
-	
-							default:
-								break;
+						if(param == "creation") {
+							Date newDate = (Date) formatter.parse(req.queryParams(param));
+							method = petition.getClass().getMethod(methodName, Date.class);
+							method.invoke(petition, newDate);
 						}
 					} catch (Exception e) {
 						res.status(Router.HTTP_SERVER_ERROR);

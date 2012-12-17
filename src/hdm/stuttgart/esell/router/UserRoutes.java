@@ -28,7 +28,7 @@ public class UserRoutes {
 				int userId = Integer.parseInt(req.params("id"));
 				
 				try {
-					User user = User.getUser(userId);
+					User user = User.getUserByID(userId);
 					res.status(Router.HTTP_OKAY);
 					return user.getJson();
 				} catch (Exception e) {
@@ -40,11 +40,12 @@ public class UserRoutes {
 		});
 		
 		// Speichert einen neuen Benutzer
-		post(new Route("/user/") {
+		post(new Route("/user") {
 			@Override
 			public Object handle(Request req, Response res) {
 				try {
 					User user = new User(
+						req.queryParams("username"),
 						req.queryParams("firstname"),
 						req.queryParams("lastname"),
 						req.queryParams("email"),
@@ -72,7 +73,7 @@ public class UserRoutes {
 				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
-					user = User.getUser(userId);
+					user = User.getUserByID(userId);
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
 					return e.getMessage();
@@ -109,7 +110,7 @@ public class UserRoutes {
 			public Object handle(Request req, Response res) {
 				try {
 					int userId = Integer.parseInt(req.params("id"));
-					User user = User.getUser(userId);
+					User user = User.getUserByID(userId);
 					user.delete();
 					
 					res.status(Router.HTTP_OKAY);

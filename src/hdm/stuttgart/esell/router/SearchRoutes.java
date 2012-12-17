@@ -1,6 +1,8 @@
 package hdm.stuttgart.esell.router;
 
 import static spark.Spark.get;
+import hdm.stuttgart.esell.Model.CategoryList;
+import hdm.stuttgart.esell.Model.PetitionList;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -9,26 +11,98 @@ import spark.Route;
  * Routen für Suchen
  * 		
  * Alle Kaufgesuche eines Nutzers: GET /user/:id/petitions
- * Alle Kaufgesuche einer Kategorie: GET /category/:catId
- * Alle Kaufgesuche: GET /petitions/
- * Alle Nutzer: GET /users/
- *
+ * Alle Kaufgesuche einer Kategorie: GET /category/:catId/petitions
+ * Alle Kaufgesuche: GET /petitions
+ * Alle Kategorien: GET /categories
+ * (Alle Nutzer: GET /users)
  */
 
 public class SearchRoutes {
 	public SearchRoutes() {
 		
+		// Alle Kaufgesuche eines Nutzers
 		get(new Route("/user/:id/petitions") {
 			@Override
 			public Object handle(Request req, Response res) {
 				try {
-					//int userId = Integer.parseInt(req.params("id"));
+					int userId = Integer.parseInt(req.params("id"));
+					String order = req.queryParams("order");
+					String start = req.queryParams("start");
+					String limit = req.queryParams("limit");
 					
-					//User user = User.getUser(userId);
-					// TODO: PetitionList nutzen!
-					//ArrayList<Petition> petitions = user.getPetitions();
-					//return petitions.getJson();
-					return "";
+					if(order == null) order = "id";
+					if(start == null) start = "0";
+					if(limit == null) limit = "100";
+					
+					PetitionList list = PetitionList.getPetitionListByUser(userId, order, Integer.parseInt(start), Integer.parseInt(limit));
+					return list.getJson();
+				} catch (Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Alle Kaufgesuche einer Kategorie
+		get(new Route("/category/:catId/petitions") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					int catId = Integer.parseInt(req.params("catId"));
+					String order = req.queryParams("order");
+					String start = req.queryParams("start");
+					String limit = req.queryParams("limit");
+					
+					if(order == null) order = "id";
+					if(start == null) start = "0";
+					if(limit == null) limit = "100";
+					
+					PetitionList list = PetitionList.getPetitionListByCategory(catId, order, Integer.parseInt(start), Integer.parseInt(limit));
+					return list.getJson();
+				} catch (Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Alle Kaufgesuche
+		get(new Route("/petitions") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					String order = req.queryParams("order");
+					String start = req.queryParams("start");
+					String limit = req.queryParams("limit");
+					
+					if(order == null) order = "id";
+					if(start == null) start = "0";
+					if(limit == null) limit = "100";
+					
+					PetitionList list = PetitionList.getPetitionList(order, Integer.parseInt(start), Integer.parseInt(limit));
+					return list.getJson();
+				} catch (Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Alle Kategorien
+		get(new Route("/categories") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					String order = req.queryParams("order");
+					String start = req.queryParams("start");
+					String limit = req.queryParams("limit");
+					
+					if(order == null) order = "id";
+					if(start == null) start = "0";
+					if(limit == null) limit = "100";
+					
+					CategoryList list = CategoryList.getCategoryList();
+					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
 					return e.getMessage();
