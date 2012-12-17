@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="libs/Jackson/jackson-core-2.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/Jackson/jackson-databind-2.1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/eSellDBServer"/>
+	<classpathentry kind="lib" path="libs/fileupload/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/fileupload/commons-io-1.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
