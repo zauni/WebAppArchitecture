@@ -5,12 +5,11 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import hdm.stuttgart.esell.Model.User;
-
-import java.lang.reflect.Method;
-
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import com.google.gson.Gson;
 
 /**
  * CRUD Routen für User:
@@ -25,9 +24,9 @@ public class UserRoutes {
 			
 			@Override
 			public Object handle(Request req, Response res) {
-				int userId = Integer.parseInt(req.params("id"));
-				
 				try {
+					int userId = Integer.parseInt(req.params("id"));
+					
 					User user = User.getUserByID(userId);
 					res.status(Router.HTTP_OKAY);
 					return user.getJson();
@@ -44,13 +43,9 @@ public class UserRoutes {
 			@Override
 			public Object handle(Request req, Response res) {
 				try {
-					User user = new User(
-						req.queryParams("username"),
-						req.queryParams("firstname"),
-						req.queryParams("lastname"),
-						req.queryParams("email"),
-						req.queryParams("password")
-					);
+					Gson gson = new Gson();
+					
+					User user = gson.fromJson(req.body(), User.class);
 					
 					user.insert();
 					res.status(Router.HTTP_CREATED);
@@ -67,32 +62,18 @@ public class UserRoutes {
 		put(new Route("/user/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
-				Method method;
-				String methodName;
-				User user;
-				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
-					user = User.getUserByID(userId);
-				} catch (Exception e) {
-					res.status(Router.HTTP_SERVER_ERROR);
-					return e.getMessage();
-				}
+					User user = User.getUserByID(userId);
 				
-				for (String param : req.queryParams()) {
-					methodName = "set" + param.substring(0, 1).toUpperCase() + param.substring(1);
-					String newValue = req.queryParams(param);
+					Gson gson = new Gson();
+					User updateUser = gson.fromJson(req.body(), User.class);
 					
-					try {
-						method = user.getClass().getMethod(methodName, String.class);
-						method.invoke(user, newValue);
-					} catch (Exception e) {
-						res.status(Router.HTTP_SERVER_ERROR);
-						return e.getMessage();
-					}
-				}
+					user.setEmail(updateUser.getEmailadress());
+					user.setFirstname(updateUser.getFirstname());
+					user.setLastname(updateUser.getLastname());
+					user.setUsername(updateUser.getUsername());
 				
-				try {
 					user.update();
 					res.status(Router.HTTP_CREATED);
 					return user.getJson();

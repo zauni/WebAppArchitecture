@@ -5,14 +5,11 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import hdm.stuttgart.esell.Model.Petition;
-
-import java.lang.reflect.Method;
-import java.sql.Date;
-import java.text.DateFormat;
-
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import com.google.gson.Gson;
 
 /**
  * CRUD Routen für Kaufgesuche (engl. Petition)
@@ -46,13 +43,13 @@ public class PetitionRoutes {
 			@Override
 			public Object handle(Request req, Response res) {
 				try {
-					Petition petition = new Petition(
-						Integer.parseInt(req.queryParams("userid")),
-						req.queryParams("title"),
-						Integer.parseInt(req.queryParams("categoryid")),
-						Integer.parseInt(req.queryParams("amount")),
-						"Searching" // TODO: Statt dem enum eine Klasse oder Konstanten in die Petition Klasse
-					);
+					Gson gson = new Gson();
+					
+					Petition petition = gson.fromJson(req.body(), Petition.class);
+					
+					if(petition.getState() == null) {
+						petition.setState("Searching");
+					}
 					
 					petition.insert();
 					res.status(Router.HTTP_CREATED);
@@ -69,54 +66,22 @@ public class PetitionRoutes {
 		put(new Route("/petition/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
-				Method method;
-				String methodName;
-				int id;
-				Petition petition;
-				DateFormat formatter = DateFormat.getDateInstance(DateFormat.FULL);
-				
-				// TODO: Date in der Petition diskutieren
-				
 				try {
-					id = Integer.parseInt(req.params("id"));
-					petition = Petition.getPetition(id);
-				} catch (Exception e) {
-					res.status(Router.HTTP_SERVER_ERROR);
-					return e.getMessage();
-				}
-				
-				for (String param : req.queryParams()) {
-					methodName = "set" + param.substring(0, 1).toUpperCase() + param.substring(1);
+					int id = Integer.parseInt(req.params("id"));
+					Petition petition = Petition.getPetition(id);
 					
-					try {
-						if(param == "userID" ||
-							param == "title" ||
-							param == "description" ||
-							param == "categoryID" ||
-							param == "state") {
-								String newValue = req.queryParams(param);
-								method = petition.getClass().getMethod(methodName, String.class);
-								method.invoke(petition, newValue);
-						}
-						if(param == "price" ||
-							param == "amount") {
-								int newInt = Integer.parseInt(req.queryParams(param));
-								method = petition.getClass().getMethod(methodName, int.class);
-								method.invoke(petition, newInt);
-						}
-								
-						if(param == "creation") {
-							Date newDate = (Date) formatter.parse(req.queryParams(param));
-							method = petition.getClass().getMethod(methodName, Date.class);
-							method.invoke(petition, newDate);
-						}
-					} catch (Exception e) {
-						res.status(Router.HTTP_SERVER_ERROR);
-						return e.getMessage();
-					}
-				}
-				
-				try {
+					Gson gson = new Gson();
+					Petition updatePetition = gson.fromJson(req.body(), Petition.class);
+					
+					if((Integer) updatePetition.getAmount() != null) petition.setAmount(updatePetition.getAmount());
+					if((Integer) updatePetition.getPrice() != null) petition.setPrice(updatePetition.getPrice());
+					if((Integer) updatePetition.getUserID() != null) petition.setUserID(updatePetition.getUserID());
+					if(updatePetition.getTitle() != null) petition.setTitle(updatePetition.getTitle());
+					if(updatePetition.getDescription() != null) petition.setDescription(updatePetition.getDescription());
+					if((Integer) updatePetition.getCategoryID() != null) petition.setCategoryID(updatePetition.getCategoryID());
+					if(updatePetition.getState() != null) petition.setState(updatePetition.getState());
+					if(updatePetition.getCreation() != null) petition.setCreation(updatePetition.getCreation());
+					
 					petition.update();
 					res.status(Router.HTTP_CREATED);
 					return petition.getJson();
