@@ -1,7 +1,6 @@
 package hdm.stuttgart.esell.router;
 
-import hdm.stuttgart.esell.errors.ErrorHandler;
-import hdm.stuttgart.esell.errors.ErrorHandler.ErrorCode;
+import hdm.stuttgart.esell.errors.ESellException;
 
 import java.io.File;
 import java.util.Iterator;
@@ -43,24 +42,24 @@ public class FileHandler {
 	/**
 	 * Holt das Bild eines Kaufgesuchs
 	 * @return Bild des Kaufgesuchs
-	 * @throws ErrorHandler 
+	 * @throws ESellException 
 	 */
-	public File getImage() throws ErrorHandler {
+	public File getImage() throws ESellException {
 		File image = new File(getFullPath());
         if(image.exists()) {
         	return image;
         }
         else {
-        	throw new ErrorHandler(ErrorCode.ERR);
+        	throw new ESellException(ESellException.ErrorCode.ERR);
         }
 	}
 	
 	/**
 	 * Speichert das Bild, das in einem Multipart-Request enthalten ist
 	 * @param req Der Spark Request
-	 * @throws ErrorHandler
+	 * @throws ESellException
 	 */
-	public void saveImgFromRequest(Request req) throws ErrorHandler {
+	public void saveImgFromRequest(Request req) throws ESellException {
 		try {
 			HttpServletRequest raw = req.raw();
 			
@@ -76,7 +75,7 @@ public class FileHandler {
 			try {
 				 items = upload.parseRequest(raw);
 			} catch (FileUploadException e) {
-				throw new ErrorHandler(ErrorCode.ERR);
+				throw new ESellException(ESellException.ErrorCode.ERR);
 			}
 			
 			// Process the uploaded items
@@ -97,7 +96,7 @@ public class FileHandler {
 			}
 		}
 		catch(Exception e) {
-			throw new ErrorHandler(ErrorHandler.ErrorCode.ERR);
+			throw new ESellException(ESellException.ErrorCode.ERR);
 		}
 	}
 	

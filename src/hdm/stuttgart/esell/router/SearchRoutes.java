@@ -1,8 +1,8 @@
 package hdm.stuttgart.esell.router;
 
 import static spark.Spark.get;
-import hdm.stuttgart.esell.Model.CategoryList;
-import hdm.stuttgart.esell.Model.PetitionList;
+import hdm.stuttgart.esell.Model.Category;
+import hdm.stuttgart.esell.Model.Petition;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -34,7 +34,7 @@ public class SearchRoutes {
 					if(start == null) start = "0";
 					if(limit == null) limit = "100";
 					
-					PetitionList list = PetitionList.getPetitionListByUser(userId, order, Integer.parseInt(start), Integer.parseInt(limit));
+					Petition.PetitionList list = Petition.getPetitionListByUser(userId, order, Integer.parseInt(start), Integer.parseInt(limit));
 					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
@@ -57,7 +57,7 @@ public class SearchRoutes {
 					if(start == null) start = "0";
 					if(limit == null) limit = "100";
 					
-					PetitionList list = PetitionList.getPetitionListByCategory(catId, order, Integer.parseInt(start), Integer.parseInt(limit));
+					Petition.PetitionList list = Petition.getPetitionListByCategory(catId, order, Integer.parseInt(start), Integer.parseInt(limit));
 					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
@@ -79,7 +79,7 @@ public class SearchRoutes {
 					if(start == null) start = "0";
 					if(limit == null) limit = "100";
 					
-					PetitionList list = PetitionList.getPetitionList(order, Integer.parseInt(start), Integer.parseInt(limit));
+					Petition.PetitionList list = Petition.getPetitionList(order, Integer.parseInt(start), Integer.parseInt(limit));
 					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
@@ -101,7 +101,7 @@ public class SearchRoutes {
 					if(start == null) start = "0";
 					if(limit == null) limit = "100";
 					
-					CategoryList list = CategoryList.getCategoryList();
+					Category.CategoryList list = Category.getCategoryList();
 					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
