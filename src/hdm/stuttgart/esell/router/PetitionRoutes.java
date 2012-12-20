@@ -5,9 +5,15 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import hdm.stuttgart.esell.Model.Petition;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URL;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.utils.IOUtils;
 
 import com.google.gson.Gson;
 
@@ -54,6 +60,73 @@ public class PetitionRoutes {
 					petition.insert();
 					res.status(Router.HTTP_CREATED);
 					return petition.getJson();
+				}
+				catch(Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Gibt das Bild eines Kaufgesuch zurück
+		get(new Route("/petition/:id/image") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					int petitionId = Integer.parseInt(req.params("id"));
+					
+					FileHandler fileHandler = new FileHandler(petitionId);
+					File image = fileHandler.getImage();
+
+					res.status(Router.HTTP_OKAY);
+					res.type("image/jpeg");
+					return IOUtils.toString(new FileInputStream(image));
+				} catch (Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Speichert das Bild zu einem Kaufgesuch
+		post(new Route("/petition/:id/image") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					int petitionId = Integer.parseInt(req.params("id"));
+					Petition petition = Petition.getPetition(petitionId);
+					
+					FileHandler fileHandler = new FileHandler(petitionId);
+					fileHandler.saveImgFromRequest(req);
+					
+					petition.setImageURL(new URL(fileHandler.getFullPath()));
+					petition.update();
+
+					res.status(Router.HTTP_OKAY);
+					return petition.getJson();
+					//return "okay";
+				}
+				catch(Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+			}
+		});
+		
+		// Ändert das Bild zu einem Kaufgesuch
+		put(new Route("/petition/:id/image") {
+			@Override
+			public Object handle(Request req, Response res) {
+				try {
+					int petitionId = Integer.parseInt(req.params("id"));
+					Petition petition = Petition.getPetition(petitionId);
+					
+					FileHandler fileHandler = new FileHandler(petitionId);
+					fileHandler.saveImgFromRequest(req);
+
+					res.status(Router.HTTP_OKAY);
+					return petition.getJson();
+					//return "okay";
 				}
 				catch(Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
