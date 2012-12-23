@@ -61,6 +61,12 @@ public class FileHandler {
 	 */
 	public void saveImgFromRequest(Request req) throws ESellException {
 		try {
+			File imageDir = new File(path);
+			if ( !imageDir.exists() )
+			{
+				imageDir.mkdir();
+			}
+			
 			HttpServletRequest raw = req.raw();
 			
 			// Create a factory for disk-based file items

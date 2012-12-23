@@ -9,6 +9,7 @@ import hdm.stuttgart.esell.Model.Petition;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.sql.Date;
 
 import spark.Request;
 import spark.Response;
@@ -54,11 +55,14 @@ public class PetitionRoutes {
 				
 				try {
 					Gson gson = new Gson();
-					
 					Petition petition = gson.fromJson(req.body(), Petition.class);
 					
 					if(petition.getState() == null) {
 						petition.setState("Searching");
+					}
+					if(petition.getCreation() == null)
+					{
+						petition.setCreation(new Date(new java.util.Date().getTime()));
 					}
 					
 					petition.insert();
@@ -104,8 +108,7 @@ public class PetitionRoutes {
 					
 					FileHandler fileHandler = new FileHandler(petitionId);
 					fileHandler.saveImgFromRequest(req);
-					
-					petition.setImageURL(new URL(fileHandler.getFullPath()));
+					petition.setImageURL(new URL("HTTP","localhost/",fileHandler.getFullPath()));
 					petition.update();
 
 					res.status(Router.HTTP_OKAY);
