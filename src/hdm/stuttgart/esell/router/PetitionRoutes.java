@@ -30,6 +30,8 @@ public class PetitionRoutes {
 		get(new Route("/petition/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int id = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(id);
@@ -48,6 +50,8 @@ public class PetitionRoutes {
 		post(new Route("/petition") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					Gson gson = new Gson();
 					
@@ -82,6 +86,7 @@ public class PetitionRoutes {
 					res.type("image/jpeg");
 					return IOUtils.toString(new FileInputStream(image));
 				} catch (Exception e) {
+					res.type( "application/json" );
 					res.status(Router.HTTP_SERVER_ERROR);
 					return e.getMessage();
 				}
@@ -92,6 +97,7 @@ public class PetitionRoutes {
 		post(new Route("/petition/:id/image") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
 				try {
 					int petitionId = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(petitionId);
@@ -117,6 +123,8 @@ public class PetitionRoutes {
 		put(new Route("/petition/:id/image") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int petitionId = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(petitionId);
@@ -139,6 +147,8 @@ public class PetitionRoutes {
 		put(new Route("/petition/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int id = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(id);
@@ -170,6 +180,8 @@ public class PetitionRoutes {
 		delete(new Route("/petition/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int id = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(id);

@@ -24,6 +24,8 @@ public class UserRoutes {
 			
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
 					
@@ -42,6 +44,8 @@ public class UserRoutes {
 		post(new Route("/user") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					Gson gson = new Gson();
 					
@@ -62,6 +66,8 @@ public class UserRoutes {
 		put(new Route("/user/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
 					User user = User.getUserByID(userId);
@@ -89,6 +95,8 @@ public class UserRoutes {
 		delete(new Route("/user/:id") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
 					User user = User.getUserByID(userId);

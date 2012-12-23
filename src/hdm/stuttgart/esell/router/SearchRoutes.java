@@ -24,6 +24,8 @@ public class SearchRoutes {
 		get(new Route("/user/:id/petitions") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int userId = Integer.parseInt(req.params("id"));
 					String order = req.queryParams("order");
@@ -47,6 +49,8 @@ public class SearchRoutes {
 		get(new Route("/category/:catId/petitions") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					int catId = Integer.parseInt(req.params("catId"));
 					String order = req.queryParams("order");
@@ -70,6 +74,8 @@ public class SearchRoutes {
 		get(new Route("/petitions") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					String order = req.queryParams("order");
 					String start = req.queryParams("start");
@@ -92,6 +98,8 @@ public class SearchRoutes {
 		get(new Route("/categories") {
 			@Override
 			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
 				try {
 					String order = req.queryParams("order");
 					String start = req.queryParams("start");
@@ -102,6 +110,7 @@ public class SearchRoutes {
 					if(limit == null) limit = "100";
 					
 					Category.CategoryList list = Category.getCategoryList();
+				
 					return list.getJson();
 				} catch (Exception e) {
 					res.status(Router.HTTP_SERVER_ERROR);
