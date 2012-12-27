@@ -5,6 +5,9 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import hdm.stuttgart.esell.Model.User;
+
+import java.util.Map;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -30,6 +33,31 @@ public class UserRoutes {
 					int userId = Integer.parseInt(req.params("id"));
 					
 					User user = User.getUserByID(userId);
+					res.status(Router.HTTP_OKAY);
+					return user.getJson();
+				} catch (Exception e) {
+					res.status(Router.HTTP_SERVER_ERROR);
+					return e.getMessage();
+				}
+				
+			}
+		});
+		
+		// Sucht User anhand seines Usernames und Passwortes
+		post(new Route("/userid") {
+			
+			@Override
+			public Object handle(Request req, Response res) {
+				res.type( "application/json" );
+				
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, String> json = (Map<String, String>) GeneralObjectDeserializer.fromJson(req.body());
+					
+					String pw = json.get("password");
+					String name = json.get("username");
+					
+					User user = User.getUserByLogin(name, pw);
 					res.status(Router.HTTP_OKAY);
 					return user.getJson();
 				} catch (Exception e) {
