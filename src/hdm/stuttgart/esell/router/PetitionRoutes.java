@@ -6,15 +6,17 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 import hdm.stuttgart.esell.Model.Petition;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Date;
+
+import javax.imageio.ImageIO;
 
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.utils.IOUtils;
 
 import com.google.gson.Gson;
 
@@ -85,10 +87,15 @@ public class PetitionRoutes {
 					
 					FileHandler fileHandler = new FileHandler(petitionId);
 					File image = fileHandler.getImage();
-
+					BufferedImage bufferedImage = ImageIO.read( image );
+					
 					res.status(Router.HTTP_OKAY);
 					res.type("image/jpeg");
-					return IOUtils.toString(new FileInputStream(image));
+					
+					OutputStream out = res.raw().getOutputStream();
+					ImageIO.write( bufferedImage, "jpg", out );
+					
+					return null;
 				} catch (Exception e) {
 					res.type( "application/json" );
 					res.status(Router.HTTP_SERVER_ERROR);
