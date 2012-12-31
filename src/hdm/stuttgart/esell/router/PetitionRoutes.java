@@ -38,7 +38,7 @@ public class PetitionRoutes {
 				try {
 					int id = Integer.parseInt(req.params("id"));
 					Petition petition = Petition.getPetition(id);
-
+					
 					res.status(Router.HTTP_OKAY);
 					return petition.getJson();
 				} catch (Exception e) {
@@ -115,9 +115,9 @@ public class PetitionRoutes {
 					
 					FileHandler fileHandler = new FileHandler(petitionId);
 					fileHandler.saveImgFromRequest(req);
-					petition.setImageURL(new URL("HTTP","localhost/",fileHandler.getFullPath()));
+					petition.setImageURL(new URL("HTTP", "localhost/" + "petition/" + petition.getID() + "/image",fileHandler.getFullPath()));
 					petition.update();
-
+					
 					res.status(Router.HTTP_OKAY);
 					return petition.getJson();
 					//return "okay";

@@ -52,7 +52,8 @@ public class SearchRoutes {
 				res.type( "application/json" );
 				
 				try {
-					int catId = Integer.parseInt(req.params("catId"));
+					
+					int catId = Integer.parseInt(req.params("catid"));
 					String order = req.queryParams("order");
 					String start = req.queryParams("start");
 					String limit = req.queryParams("limit");
@@ -64,6 +65,7 @@ public class SearchRoutes {
 					Petition.PetitionList list = Petition.getPetitionListByCategory(catId, order, Integer.parseInt(start), Integer.parseInt(limit));
 					return list.getJson();
 				} catch (Exception e) {
+					e.printStackTrace();
 					res.status(Router.HTTP_SERVER_ERROR);
 					return e.getMessage();
 				}
